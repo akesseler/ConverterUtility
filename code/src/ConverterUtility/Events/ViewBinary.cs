@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2021 plexdata.de
+ * Copyright (c) 2024 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,12 +30,15 @@ namespace Plexdata.ConverterUtility.Events
 
     public class ViewBinaryEventArgs : EventArgs
     {
-        public ViewBinaryEventArgs(Byte[] source)
+        public ViewBinaryEventArgs(Byte[] bytes, String plain)
             : base()
         {
-            this.Source = source ?? new Byte[0];
+            this.Bytes = bytes ?? new Byte[0];
+            this.Plain = plain ?? String.Empty;
         }
 
-        public Byte[] Source { get; private set; }
+        public Byte[] Bytes { get; private set; }
+
+        public String Plain { get; private set; }
     }
 }

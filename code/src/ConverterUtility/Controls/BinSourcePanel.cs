@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2021 plexdata.de
+ * Copyright (c) 2024 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -100,14 +100,32 @@ namespace Plexdata.ConverterUtility.Controls
 
         #region Private Methods
 
-        private Byte[] GetFromRawData(String source)
+        private Byte[] GetBytesFromRawData(String[] source)
         {
-            return (this.tscEncodings.SelectedItem as Encoding).GetBytes(source);
+            return (this.tscEncodings.SelectedItem as Encoding).GetBytes(this.CombineLines(source));
         }
 
-        private Byte[] GetFromBase64(String source)
+        private String GetPlainFromRawData(String[] source)
         {
-            return Convert.FromBase64String(StringExtractor.Extract(source));
+            return this.CombineLines(source);
+        }
+
+        private Byte[] GetBytesFromBase64(String[] source)
+        {
+            return Convert.FromBase64String(StringExtractor.Extract(this.CombineLines(source)));
+        }
+
+        private String GetPlainFromBase64(String[] source)
+        {
+            return (this.tscEncodings.SelectedItem as Encoding).GetString(this.GetBytesFromBase64(source));
+        }
+
+        private String CombineLines(String[] source)
+        {
+            // BUG: RichTextBox line ending fix...
+            // The RichTextBox returns a string with "\n" only.
+            // But a TextBox instead wants "\r\n" as line endings. 
+            return String.Join(Environment.NewLine, source);
         }
 
         #endregion
@@ -134,24 +152,27 @@ namespace Plexdata.ConverterUtility.Controls
 
             try
             {
-                Byte[] source = null;
+                Byte[] bytes = null;
+                String plain = null;
 
                 if (this.tbcTypes.SelectedItem is BinaryType selected)
                 {
                     switch (selected)
                     {
                         case BinaryType.RAW:
-                            source = this.GetFromRawData(this.txtSource.Text);
+                            bytes = this.GetBytesFromRawData(this.txtSource.Lines);
+                            plain = this.GetPlainFromRawData(this.txtSource.Lines);
                             break;
                         case BinaryType.BASE64:
-                            source = this.GetFromBase64(this.txtSource.Text);
+                            bytes = this.GetBytesFromBase64(this.txtSource.Lines);
+                            plain = this.GetPlainFromBase64(this.txtSource.Lines);
                             break;
                         default:
                             return;
                     }
                 }
 
-                this.ViewBinary?.Invoke(this, new ViewBinaryEventArgs(source));
+                this.ViewBinary?.Invoke(this, new ViewBinaryEventArgs(bytes, plain));
             }
             catch (Exception exception)
             {
