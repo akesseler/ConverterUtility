@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2021 plexdata.de
+ * Copyright (c) 2024 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -52,17 +52,23 @@ namespace Plexdata.ConverterUtility.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tbsButtons = new System.Windows.Forms.ToolStrip();
+            this.tbbShiftView = new System.Windows.Forms.ToolStripButton();
+            this.tbsSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tbcBytesPerLine = new System.Windows.Forms.ToolStripComboBox();
             this.tbcBlockWidth = new System.Windows.Forms.ToolStripComboBox();
             this.tbbUpperCase = new System.Windows.Forms.ToolStripButton();
-            this.binView = new ConverterUtility.Controls.HexViewer();
+            this.binView = new Plexdata.ConverterUtility.Controls.HexViewer();
+            this.rawView = new System.Windows.Forms.TextBox();
             this.tbsButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbsButtons
             // 
             this.tbsButtons.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tbbShiftView,
+            this.tbsSeparator1,
             this.tbcBytesPerLine,
             this.tbcBlockWidth,
             this.tbbUpperCase});
@@ -70,6 +76,23 @@ namespace Plexdata.ConverterUtility.Controls
             this.tbsButtons.Name = "tbsButtons";
             this.tbsButtons.Size = new System.Drawing.Size(701, 25);
             this.tbsButtons.TabIndex = 0;
+            // 
+            // tbbShiftView
+            // 
+            this.tbbShiftView.CheckOnClick = true;
+            this.tbbShiftView.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbbShiftView.Image = global::Plexdata.ConverterUtility.Properties.Resources.ViewSmall;
+            this.tbbShiftView.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbbShiftView.Name = "tbbShiftView";
+            this.tbbShiftView.Size = new System.Drawing.Size(23, 22);
+            this.tbbShiftView.Text = "Upper";
+            this.tbbShiftView.ToolTipText = "Toggle between binary and raw view.";
+            this.tbbShiftView.CheckStateChanged += new System.EventHandler(this.OnShiftViewCheckStateChanged);
+            // 
+            // tbsSeparator1
+            // 
+            this.tbsSeparator1.Name = "tbsSeparator1";
+            this.tbsSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // tbcBytesPerLine
             // 
@@ -111,11 +134,27 @@ namespace Plexdata.ConverterUtility.Controls
             this.binView.Size = new System.Drawing.Size(701, 472);
             this.binView.TabIndex = 1;
             // 
+            // rawView
+            // 
+            this.rawView.BackColor = System.Drawing.SystemColors.Window;
+            this.rawView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rawView.Font = new System.Drawing.Font("Consolas", 9F);
+            this.rawView.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.rawView.Location = new System.Drawing.Point(0, 25);
+            this.rawView.Multiline = true;
+            this.rawView.Name = "rawView";
+            this.rawView.ReadOnly = true;
+            this.rawView.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.rawView.Size = new System.Drawing.Size(701, 472);
+            this.rawView.TabIndex = 1;
+            this.rawView.Visible = false;
+            // 
             // BinResultPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.binView);
+            this.Controls.Add(this.rawView);
             this.Controls.Add(this.tbsButtons);
             this.Name = "BinResultPanel";
             this.Size = new System.Drawing.Size(701, 497);
@@ -129,9 +168,12 @@ namespace Plexdata.ConverterUtility.Controls
         #endregion
 
         private System.Windows.Forms.ToolStrip tbsButtons;
-        private HexViewer binView;
+        private Plexdata.ConverterUtility.Controls.HexViewer binView;
+        private System.Windows.Forms.TextBox rawView;
         private System.Windows.Forms.ToolStripComboBox tbcBytesPerLine;
         private System.Windows.Forms.ToolStripComboBox tbcBlockWidth;
         private System.Windows.Forms.ToolStripButton tbbUpperCase;
+        private System.Windows.Forms.ToolStripButton tbbShiftView;
+        private System.Windows.Forms.ToolStripSeparator tbsSeparator1;
     }
 }

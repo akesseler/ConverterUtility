@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2021 plexdata.de
+ * Copyright (c) 2024 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -55,6 +55,9 @@ namespace Plexdata.ConverterUtility.Controls
             this.tbcBlockWidth.SelectedItem = 2;
 
             this.tbbUpperCase.Checked = this.binView.UpperCase;
+            this.tbbShiftView.Checked = true;
+
+            this.rawView.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
         }
 
         #endregion
@@ -66,11 +69,17 @@ namespace Plexdata.ConverterUtility.Controls
             this.binView.Buffer = source;
         }
 
+        public void SetResult(String source)
+        {
+            this.rawView.Text = source;
+        }
+
         public void LoadSettings(ProgramSettings settings)
         {
             this.tbcBytesPerLine.SelectedItem = settings.BinResultPanel.BytesPerLine;
             this.tbcBlockWidth.SelectedItem = settings.BinResultPanel.BlockWidth;
             this.tbbUpperCase.Checked = settings.BinResultPanel.UpperCase;
+            this.tbbShiftView.Checked = settings.BinResultPanel.ViewBinary;
         }
 
         public void SaveSettings(ProgramSettings settings)
@@ -78,6 +87,7 @@ namespace Plexdata.ConverterUtility.Controls
             settings.BinResultPanel.BytesPerLine = (Int32)this.tbcBytesPerLine.SelectedItem;
             settings.BinResultPanel.BlockWidth = (Int32)this.tbcBlockWidth.SelectedItem;
             settings.BinResultPanel.UpperCase = this.tbbUpperCase.Checked;
+            settings.BinResultPanel.ViewBinary = this.tbbShiftView.Checked;
         }
 
         #endregion
@@ -103,6 +113,18 @@ namespace Plexdata.ConverterUtility.Controls
         private void OnUpperCaseCheckStateChanged(Object sender, EventArgs args)
         {
             this.binView.UpperCase = this.tbbUpperCase.Checked;
+        }
+
+        private void OnShiftViewCheckStateChanged(Object sender, EventArgs args)
+        {
+            Boolean disabled = this.tbbShiftView.Checked;
+
+            this.binView.Visible = disabled;
+            this.rawView.Visible = !disabled;
+
+            this.tbcBytesPerLine.Enabled = disabled;
+            this.tbcBlockWidth.Enabled = disabled;
+            this.tbbUpperCase.Enabled = disabled;
         }
 
         #endregion

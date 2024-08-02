@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2021 plexdata.de
+ * Copyright (c) 2024 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -299,6 +299,7 @@ namespace Plexdata.ConverterUtility.Settings
             this.BlockWidth = 2;
             this.BytesPerLine = 16;
             this.UpperCase = true;
+            this.ViewBinary = true;
         }
 
         [CustomParser(typeof(SeriesParser))]
@@ -312,5 +313,9 @@ namespace Plexdata.ConverterUtility.Settings
         [CustomParser(typeof(BooleanParser))]
         [ConfigValue("upper-case", Default = true)]
         public Boolean UpperCase { get; set; }
+
+        [CustomParser(typeof(BooleanParser))]
+        [ConfigValue("view-binary", Default = true)]
+        public Boolean ViewBinary { get; set; }
     }
 }

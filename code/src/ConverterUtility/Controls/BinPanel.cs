@@ -1,7 +1,7 @@
 ﻿/*
  * MIT License
  * 
- * Copyright (c) 2021 plexdata.de
+ * Copyright (c) 2024 plexdata.de
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -67,7 +67,8 @@ namespace Plexdata.ConverterUtility.Controls
         {
             try
             {
-                this.panResult.SetResult(args.Source);
+                this.panResult.SetResult(args.Bytes);
+                this.panResult.SetResult(args.Plain);
             }
             catch (Exception exception)
             {
