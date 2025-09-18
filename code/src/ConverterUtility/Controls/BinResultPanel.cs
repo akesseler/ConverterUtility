@@ -22,14 +22,28 @@
  * SOFTWARE.
  */
 
+using Plexdata.ConverterUtility.Defines;
 using Plexdata.ConverterUtility.Settings;
+using Plexdata.Utilities.Analyzers;
+using Plexdata.Utilities.Analyzers.Factories;
+using Plexdata.Utilities.Analyzers.Interfaces;
+using Plexdata.Utilities.Analyzers.Interfaces.Models;
+using Plexdata.Utilities.Analyzers.Processors;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Plexdata.ConverterUtility.Controls
 {
     public partial class BinResultPanel : UserControl
     {
+        private readonly IEnumerable<IFileSignature> signatures = null;
+        private readonly IFileSignatureAnalyzer analyzer = null;
+        private readonly IEnumerable<(String Handle, String Filter)> filters = null;
+
         #region Construction
 
         public BinResultPanel()
@@ -58,6 +72,16 @@ namespace Plexdata.ConverterUtility.Controls
             this.tbbShiftView.Checked = true;
 
             this.rawView.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+
+            this.signatures = (new FileSignatureFactory()).CreateDefaultSignatures();
+            this.analyzer = new FileSignatureAnalyzer(new ByteOrderMarkProcessor());
+
+            // Each result looks like: Image Files (*.bmp;*.jpg;*.gif)|*.bmp;*.jpg;*.gif
+            this.filters = this.signatures
+                .Select(x => (
+                    Handle: x.Name,
+                    Filter: String.Format("{0} ({1})|{1}", x.Name, String.Join(";", x.Extensions.Split(',').Select(y => $"*{y}"))))
+                );
         }
 
         #endregion
@@ -125,6 +149,53 @@ namespace Plexdata.ConverterUtility.Controls
             this.tbcBytesPerLine.Enabled = disabled;
             this.tbcBlockWidth.Enabled = disabled;
             this.tbbUpperCase.Enabled = disabled;
+        }
+
+        private void OnSaveDataButtonClick(Object sender, EventArgs args)
+        {
+            try
+            {
+                if (this.binView.Buffer.Length == 0)
+                {
+                    Program.ShowMessage(this, "No data to save to file.", MessageType.Information);
+                    return;
+                }
+
+                using (MemoryStream stream = new MemoryStream(this.binView.Buffer))
+                {
+                    IEnumerable<IAnalyzerResult> results = this.analyzer.Analyze(stream, this.signatures);
+
+                    List<(String Handle, String Filter)> filters = new List<(String Handle, String Filter)>();
+
+                    foreach (IAnalyzerResult result in results)
+                    {
+                        filters.AddRange(this.filters.Where(x => x.Handle == result.Name));
+                    }
+
+                    filters.Add(("All files", "All files (*.*)|*.*"));
+
+                    SaveFileDialog dialog = new SaveFileDialog()
+                    {
+                        Title = "Save As",
+                        Filter = String.Join("|", filters.Select(x => x.Filter)),
+                        FilterIndex = 0,
+                        RestoreDirectory = true,
+                        InitialDirectory = @"C:\",
+                        CheckPathExists = true,
+                        CheckFileExists = false,
+                    };
+
+                    if (DialogResult.OK == dialog.ShowDialog())
+                    {
+                        File.WriteAllBytes(dialog.FileName, this.binView.Buffer);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+                Program.ShowMessage(this, exception.Message, MessageType.Error);
+            }
         }
 
         #endregion

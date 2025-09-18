@@ -54,21 +54,25 @@ namespace Plexdata.ConverterUtility.Controls
         {
             this.components = new System.ComponentModel.Container();
             this.tbsButtons = new System.Windows.Forms.ToolStrip();
-            this.tbbShiftView = new System.Windows.Forms.ToolStripButton();
             this.tbsSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbsSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tbcBytesPerLine = new System.Windows.Forms.ToolStripComboBox();
             this.tbcBlockWidth = new System.Windows.Forms.ToolStripComboBox();
-            this.tbbUpperCase = new System.Windows.Forms.ToolStripButton();
             this.binView = new Plexdata.ConverterUtility.Controls.HexViewer();
             this.rawView = new System.Windows.Forms.TextBox();
+            this.tbbSaveData = new System.Windows.Forms.ToolStripButton();
+            this.tbbShiftView = new System.Windows.Forms.ToolStripButton();
+            this.tbbUpperCase = new System.Windows.Forms.ToolStripButton();
             this.tbsButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbsButtons
             // 
             this.tbsButtons.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tbbShiftView,
+            this.tbbSaveData,
             this.tbsSeparator1,
+            this.tbbShiftView,
+            this.tbsSeparator2,
             this.tbcBytesPerLine,
             this.tbcBlockWidth,
             this.tbbUpperCase});
@@ -76,6 +80,17 @@ namespace Plexdata.ConverterUtility.Controls
             this.tbsButtons.Name = "tbsButtons";
             this.tbsButtons.Size = new System.Drawing.Size(701, 25);
             this.tbsButtons.TabIndex = 0;
+            // 
+            // tbbSaveData
+            // 
+            this.tbbSaveData.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbbSaveData.Image = global::Plexdata.ConverterUtility.Properties.Resources.SaveSmall;
+            this.tbbSaveData.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbbSaveData.Name = "tbbSaveData";
+            this.tbbSaveData.Size = new System.Drawing.Size(23, 22);
+            this.tbbSaveData.Text = "Save";
+            this.tbbSaveData.ToolTipText = "Save data to file.";
+            this.tbbSaveData.Click += new System.EventHandler(this.OnSaveDataButtonClick);
             // 
             // tbbShiftView
             // 
@@ -93,6 +108,11 @@ namespace Plexdata.ConverterUtility.Controls
             // 
             this.tbsSeparator1.Name = "tbsSeparator1";
             this.tbsSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tbsSeparator2
+            // 
+            this.tbsSeparator2.Name = "tbsSeparator2";
+            this.tbsSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // tbcBytesPerLine
             // 
@@ -175,5 +195,7 @@ namespace Plexdata.ConverterUtility.Controls
         private System.Windows.Forms.ToolStripButton tbbUpperCase;
         private System.Windows.Forms.ToolStripButton tbbShiftView;
         private System.Windows.Forms.ToolStripSeparator tbsSeparator1;
+        private System.Windows.Forms.ToolStripSeparator tbsSeparator2;
+        private System.Windows.Forms.ToolStripButton tbbSaveData;
     }
 }
